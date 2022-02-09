@@ -7,6 +7,7 @@ export default class {
     this.document = document
     this.onNavigate = onNavigate
     this.store = store
+    console.log(store)
     const buttonNewBill = document.querySelector(`button[data-testid="btn-new-bill"]`)
     if (buttonNewBill) buttonNewBill.addEventListener('click', this.handleClickNewBill)
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
@@ -38,7 +39,8 @@ export default class {
             try {
               return {
                 ...doc,
-                date: formatDate(doc.date),
+                date: doc.date,
+                // date: formatDate(doc.date),
                 status: formatStatus(doc.status)
               }
             } catch(e) {
