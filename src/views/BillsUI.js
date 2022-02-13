@@ -5,6 +5,7 @@ import LoadingPage from "./LoadingPage.js"
 import Actions from './Actions.js'
 
 const row = (bill) => {
+  console.log(bill);
   return (`
     <tr>
       <td>${bill.type}</td>
@@ -27,7 +28,6 @@ export default ({ data: bills, loading, error }) => {
 
 
   // not working with formatDate l43 on containers/Bills.js
- 
   if(bills !== undefined){
     bills.sort(function(a, b) {
       let d1 = new Date(a.date)
@@ -36,8 +36,6 @@ export default ({ data: bills, loading, error }) => {
     });
   }
   
-  
-
   const modal = () => (`
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
