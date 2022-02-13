@@ -20,22 +20,18 @@ const row = (bill) => {
     `)
   }
 
-const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
-}
+  const rows = (data) => {
+    return (data && data.length) ? data
+      .sort(function (a, b) {
+        return (new Date(a.date) < new Date(b.date)) ? 1 : -1
+      })
+      .map(bill => {
+        return row(bill)
+      }).join("") : ""
+  }
 
 export default ({ data: bills, loading, error }) => {
 
-
-  // not working with formatDate l43 on containers/Bills.js
-  if(bills !== undefined){
-    bills.sort(function(a, b) {
-      let d1 = new Date(a.date)
-      let d2 = new Date(b.date)
-      return d2.getTime()- d1.getTime();
-    });
-  }
-  
   const modal = () => (`
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

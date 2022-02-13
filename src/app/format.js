@@ -1,5 +1,5 @@
 export const formatDate = (dateStr) => {
-  const date = new Date(dateStr)
+  const date = new Date(dateStr)  ? new Date(dateStr) : ""
   const ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(date)
   const mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(date)
   const da = new Intl.DateTimeFormat('fr', { day: '2-digit' }).format(date)
@@ -14,6 +14,6 @@ export const formatStatus = (status) => {
     case "accepted":
       return "Accepté"
     case "refused":
-      return "Refused"
+      return "Refusé"
   }
 }
