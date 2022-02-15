@@ -86,8 +86,10 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    if (this.counter === undefined || this.id !== bill.id) this.counter = 0
-    if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+    console.log('EVENT', e);
+    // --- SELECTED ---
+    if (this.counter === undefined || this.id !== bill.id) this.counter = 0 //initialisation du compteur à 0
+    if (this.id === undefined || this.id !== bill.id) this.id = bill.id //on initialise bill.id à l'id du bill cliqué
     if (this.counter % 2 === 0) {
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
@@ -131,22 +133,25 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
-    if (this.index === undefined || this.index !== index) this.index = index
-    if (this.counter % 2 === 0) {
+    this.index = index;
+    if (!$(`#arrow-icon${this.index}`).hasClass('expanded')){
+      $(`#arrow-icon${this.index}`).addClass('expanded')
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
-      this.counter ++
     } else {
+      $(`#arrow-icon${this.index}`).addClass('expanded')
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
-      this.counter ++
+     
     }
 
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      if(!$(`#open-bill${bill.id}`).attr('hasEventListener')) {
+        $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+        $(`#open-bill${bill.id}`).attr( "hasEventListener", true )
+      }
     })
 
     return bills

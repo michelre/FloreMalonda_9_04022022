@@ -17,23 +17,36 @@ export default class NewBill {
   }
 
   handleChangeFile = e => {
+    e.preventDefault()
+   
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    if (/(?:jpg|jpeg|png)/g.test(file.name)) {
-      const filePath = e.target.value.split(/\\/g)
-      const fileName = filePath[filePath.length - 1]
+    const filePath = e.target.value.split(/\\/g);
+    const fileName = filePath[filePath.length-1]
+    const formData = new FormData()
+    const email = JSON.parse(localStorage.getItem("user")).email
+    formData.append('file', file)
+    formData.append('email', email)
+    
+    if(fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png')) {
       this.store
-        .storage
-        .ref(`justificatifs/${fileName}`)
-        .put(file)
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(url => {
-          this.fileUrl = url
-          this.fileName = fileName
-        })
-    } else if (!/(?:jpg|jpeg|png)/g.test(file.name)) {
-      alert(('Seul les formats jpg, jpeg ou png sont acceptés'))
-      e.target.value = ''
+      .bills()
+      .create({
+        data: formData,
+        headers: {
+          noContentType: true
+        }
+      })
+      .then(({fileUrl, key}) => {
+        this.billId = key
+        this.fileUrl = fileUrl
+        this.fileName = fileName
+      }).catch(error => console.error(error))
     }
+
+    else {
+      e.target.value = null;
+      alert("Votre fichier doit être au format jpg, jpeg ou png")
+    } 
   }
 
   handleSubmit = e => {
