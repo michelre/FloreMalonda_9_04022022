@@ -1,7 +1,6 @@
 import VerticalLayout from './VerticalLayout.js'
 import ErrorPage from "./ErrorPage.js"
 import LoadingPage from "./LoadingPage.js"
-
 import Actions from './Actions.js'
 
 const row = (bill) => {
@@ -13,7 +12,7 @@ const row = (bill) => {
       <td>${bill.amount} €</td>
       <td>${bill.status}</td>
       <td>
-        ${Actions(bill.fileUrl, bill.fileName)}
+        ${Actions(bill.fileUrl, bill.fileName && bill.fileName!='null' ? bill.fileName : null)}
       </td>
     </tr>
     `)
@@ -22,7 +21,7 @@ const row = (bill) => {
   const rows = (data) => {
     return (data && data.length) ? data
       .sort(function (a, b) {
-        return (new Date(a.date) < new Date(b.date)) ? 1 : -1
+        return a.date < b.date ? 1 : -1
       })
       .map(bill => {
         return row(bill)
