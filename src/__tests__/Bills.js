@@ -5,7 +5,7 @@
 import {fireEvent, screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js";
+import { ROUTES, ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
 import router from "../app/Router.js";
@@ -61,6 +61,7 @@ describe("Given I am connected as an employee", () => {
       })
     })
 
+    // TEST HANDLE CLICK NEW BILL 
     describe("When I click on button 'Nouvelle note de frais'", () => {
       test("Then I should be sent on the new bill page", () => {
         Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -81,9 +82,39 @@ describe("Given I am connected as an employee", () => {
         expect(mockFunctionHandleClick).toHaveBeenCalled();
       }) 
     })
-    //TEST CLICK ON EYE ICON
-    //MOCK THE MODAL
-    //MOCK THE HANDLE CLICK ICON
+  })
+  //TEST CLICK ON EYE ICON
+  describe("When I click on first eye icon", () => {
+    test("Then modal should open", () => {
+      Object.defineProperty(window, localStorage, {value: localStorageMock})
+      window.localStorage.setItem("user", JSON.stringify({type: 'Employee'}))
+      const html = BillsUI({data: bills})
+      document.body.innerHTML = html
+    
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+        
+      const billsContainer = new Bills({
+        document,
+        onNavigate,
+        localStorage:localStorageMock,
+        store: null,
+      });
+
+      //MOCK THE MODAL
+      $.fn.modal = jest.fn();
+
+      //MOCK THE HANDLE CLICK ICON
+      const handleClickIconEye = jest.fn(() => {
+        billsContainer.handleClickIconEye
+      });
+      const firstEyeIcon = screen.getAllByTestId("icon-eye")[0];
+      firstEyeIcon.addEventListener("click", handleClickIconEye)
+      fireEvent.click(firstEyeIcon)
+      expect(handleClickIconEye).toHaveBeenCalled();
+      expect($.fn.modal).toHaveBeenCalled();
+    })
   })
 })
 
