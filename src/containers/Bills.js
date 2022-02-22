@@ -1,5 +1,5 @@
 import { ROUTES_PATH } from '../constants/routes.js'
-import { formatDate, formatStatus } from "../app/format.js"
+import { formatStatus } from "../app/format.js"
 import Logout from "./Logout.js"
 
 export default class {
@@ -27,7 +27,7 @@ export default class {
     $('#modaleFile').modal('show')
   }
 
-  /* istanbul ignore next */
+
   getBills = () => {
     if (this.store) {
       return this.store
@@ -45,7 +45,7 @@ export default class {
             } catch(e) {
               // if for some reason, corrupted data was introduced, we manage here failing formatDate function
               // log the error and return unformatted date in that case
-              console.log(e,'for',doc)
+              // console.log(e,'for',doc)
               return {
                 ...doc,
                 status: formatStatus(doc.status)

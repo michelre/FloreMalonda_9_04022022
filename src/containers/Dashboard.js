@@ -86,7 +86,6 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    console.log('EVENT', e);
     // --- SELECTED ---
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0 //initialisation du compteur à 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id //on initialise bill.id à l'id du bill cliqué
