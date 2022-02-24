@@ -7,11 +7,8 @@
  import NewBill from "../containers/NewBill.js"
  import { ROUTES, ROUTES_PATH } from "../constants/routes"
  import { localStorageMock } from "../__mocks__/localStorage.js";
- import userEvent from "@testing-library/user-event";
  import mockStore from "../__mocks__/store.js";
- import { bills } from "../fixtures/bills";
  import router from "../app/Router.js";
- import BillsUI from "../views/BillsUI.js"; 
 
  jest.mock("../app/store", () => mockStore)
 
@@ -115,9 +112,59 @@ describe("Given I am connected as an employee", () => {
 
 // TEST INTEGRATION POST METHOD
 describe('Given I am a user connected as Employee', () => {
-   // describe("When I submit the form completed", () => {
-   //    // TO DO : CODE A COMPLETER 
-   // })
+   describe("When I submit the form completed", () => {
+      test("Then the bill is created", async() => {
+         const html = NewBillUI();
+         document.body.innerHTML = html
+         const onNavigate = (pathname) => {
+            document.innerHTML= ROUTES({pathname})
+         }
+         Object.defineProperties(window, 'localStorage', {value: localStorageMock})
+         window.localStorage.setItem("user", JSON.stringify({type: 'Employee', email: 'a@a'}))
+
+         const newBill = new NewBill({
+            document,
+            onNavigate,
+            store: null,
+            localStorage: window.localStorage,
+         })
+
+         // initial test values 
+         const validBill = {
+            type: 'Hôtel et logement',
+            name: 'Séjour pro',
+            amount: 400,
+            date: '2022-02-24',
+            vat: '80',
+            pct: 20,
+            commentary: 'commentary',
+            fileUrl: '../img/test.jpg',
+            fileName: 'test.jpg',
+            status: 'pending',
+         }
+         // load the values
+         screen.getByTestId("expense-type").value = validBill.type;
+         screen.getByTestId("expense-name").value = validBill.name;
+         screen.getByTestId("amount").value = validBill.amount;
+         screen.getByTestId("datepicker").value = validBill.date;
+         screen.getByTestId("vat").value = validBill.vat;
+         screen.getByTestId("ptc").value = validBill.pct;
+         screen.getByTestId("commentary").value = validBill.commentary;
+
+         newBill.fileUrl = validBill.fileUrl;
+         newBill.fileName = validBill.fileName;
+
+         newBill.updateBill = jest.fn();
+         const handleSubmit = jest.fn((e) => newBill.handleSubmit(e))
+         
+         const form = screen.getByTestId("form-new-bill");
+         form.addEventListener('submit', handleSubmit)
+         fireEvent.submit(form)
+
+         expect(handleSubmit).toHaveBeenCalled()
+         expect(newBill.updateBill).toHaveBeenCalled()
+      })
+   })
 
    // TEST API ERROR
    describe("When an error occurs on API", () => {
