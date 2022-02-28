@@ -2,8 +2,6 @@
  * @jest-environment jsdom
  */
 
-// TO DO : reste à tester : rouge sur le return dans la méthode getBills()
-
 import {fireEvent, screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
@@ -169,7 +167,7 @@ describe('Given I am connected as an employee', () => {
 
     // TEST 500 ERROR
     test("fetches messages from an API and fails with 500 message error", async () => {
-      mockStore.bills.mockImplementationOnce(() => {
+      mockStore.bills = jest.fn().mockImplementationOnce(() => {
         return {
           list : () =>  {
             return Promise.reject(new Error("Erreur 500"))
