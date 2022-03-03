@@ -161,13 +161,13 @@ describe('Given I am connected as an employee', () => {
         }})
       window.onNavigate(ROUTES_PATH.Bills)
       await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 404/)
+      const message = await waitFor(() => screen.getByText(/Erreur 404/))
       expect(message).toBeTruthy()
     })
 
     // TEST 500 ERROR
     test("fetches messages from an API and fails with 500 message error", async () => {
-      mockStore.bills = jest.fn().mockImplementationOnce(() => {
+      mockStore.bills.mockImplementationOnce(() => {
         return {
           list : () =>  {
             return Promise.reject(new Error("Erreur 500"))
@@ -176,7 +176,7 @@ describe('Given I am connected as an employee', () => {
 
       window.onNavigate(ROUTES_PATH.Bills)
       await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 500/)
+      const message = await waitFor(() => screen.getByText(/Erreur 500/))
       expect(message).toBeTruthy()
     })
   })
