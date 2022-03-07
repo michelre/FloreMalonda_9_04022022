@@ -18,8 +18,10 @@ export default class NewBill {
 
   handleChangeFile = e => {
     e.preventDefault()
+    console.log('TEST', this.store);
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g);
+    console.log('FILE', file.name);
+    const filePath = file.name.split(/\\/g);
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
@@ -70,7 +72,7 @@ export default class NewBill {
   }
 
   // not need to cover this function by tests
-  
+  /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.store) {
       this.store
